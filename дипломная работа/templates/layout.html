@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover">
+    <title>Мир Книжек — Уютный магазин</title>
+    
+    <!-- ВАРИАНТ 1: Локальный Bootstrap (рекомендуется) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    
+    <!-- ВАРИАНТ 2: Альтернативный CDN, если локальный не хотите (раскомментируйте и закомментируйте строку выше) 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    -->
+    
+    <!-- Дополнительные стили (можно оставить как есть или вынести в static/css/style.css) -->
+    <style>
+        body {
+            background-color: #feffff;
+            font-family: 'Inter', sans-serif;
+            color: #2c2b28;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .navbar {
+            background-color: #ffffffdd;
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid #e2d4c0;
+            padding: 0.6rem 0;
+        }
+        .navbar-brand {
+            font-family: 'Playfair Display', serif;
+            font-weight: 800;
+            font-size: 1.4rem;
+            background: linear-gradient(150deg, #000000, #880d1e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent !important;
+        }
+        @media (min-width: 768px) {
+            .navbar-brand { font-size: 1.8rem; }
+        }
+        .btn-book {
+            background-color: #e9e0d3;
+            border: none;
+            border-radius: 40px;
+            color: #4a3b2f;
+            font-weight: 600;
+            padding: 6px 0;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+        .btn-book:hover {
+            background-color: #d8cbba;
+            transform: translateY(-1px);
+        }
+        .book-card {
+            background: #f6f4f0;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: 0.2s;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #f0ebe3;
+        }
+        .book-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 18px rgba(0,0,0,0.1);
+        }
+        .book-img-wrapper {
+            background-color: #f8f4ef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem;
+            aspect-ratio: 3 / 4;
+        }
+        .book-img-wrapper img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+        }
+        .book-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #2c241e;
+            margin-bottom: 0.2rem;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .book-author {
+            font-size: 0.7rem;
+            color: #8f7a68;
+            margin-bottom: 0.4rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .book-price {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #b1622c;
+        }
+        .catalog-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        @media (min-width: 576px) {
+            .catalog-grid { gap: 16px; }
+        }
+        @media (min-width: 768px) {
+            .catalog-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+            }
+        }
+        @media (min-width: 992px) {
+            .catalog-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+        .container {
+            max-width: 1400px;
+        }
+        @media (max-width: 480px) {
+            .book-title { font-size: 0.8rem; }
+            .book-price { font-size: 0.9rem; }
+            .btn-book, .btn-outline-secondary {
+                font-size: 0.7rem;
+                padding: 5px 0;
+            }
+            .card-body { padding: 0.6rem; }
+            .catalog-grid { gap: 10px; }
+        }
+        .footer {
+            background-color: #e7dbcd;
+            margin-top: 3rem;
+            padding: 1.5rem 0;
+            font-size: 0.85rem;
+        }
+        .search-bar {
+            border-radius: 50px;
+            border: 1px solid #dfd2c0;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+        /* Для кнопки админки */
+        .btn-admin {
+            background-color: #6c757d;
+            color: white;
+        }
+        .btn-custom {
+            border-radius: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container">
+        <a class="navbar-brand" href="/">📚 МИР КНИЖЕК</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <form class="d-flex mx-auto w-100 w-lg-50 mt-2 mt-lg-0" action="/" method="GET">
+                <input class="form-control search-bar" type="search" name="search" placeholder="Поиск книги или автора..." value="{{ search or '' }}">
+            </form>
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item"><a class="nav-link" href="/cart">🛒 Корзина <span class="badge bg-secondary rounded-pill">{{ session.get('cart', [])|length }}</span></a></li>
+                {% if session.username %}
+                    <li class="nav-item"><a class="nav-link" href="/my_reservations">📌 Мои брони</a></li>
+                    {% if session.is_admin %}
+                    <li class="nav-item"><a class="btn btn-admin btn-custom me-3 my-1" href="/admin">⚙️ Админка</a></li>
+                    {% endif %}
+                    <li class="nav-item"><a class="nav-link fw-bold" href="/profile">👤 {{ session.username }}</a></li>
+                    <li class="nav-item"><a class="btn btn-outline-danger btn-sm my-1" href="/logout">Выход</a></li>
+                {% else %}
+                    <li class="nav-item"><a class="nav-link" href="/login">Вход</a></li>
+                    <li class="nav-item"><a class="btn btn-primary btn-custom text-white my-1" href="/register" style="background-color: #8b735b;">Регистрация</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container my-4">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-light alert-dismissible fade show border-0 mb-3" style="border-left: 4px solid #8b735b;">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+</div>
+
+<footer class="footer text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <h6 class="fw-bold">📞 Контакты</h6>
+                <p class="mb-1">+7 (905) 400-24-49</p>
+            </div>
+            <div class="col-md-4 mb-3">
+                <h6 class="fw-bold">🏠 Адрес</h6>
+                <p>г. Элиста, ул. Ленина, 245</p>
+                <a href="https://yandex.ru/maps/?text=Элиста, улица Ленина, 245" target="_blank" class="btn btn-sm btn-outline-secondary rounded-pill">🗺️ Карта</a>
+            </div>
+            <div class="col-md-4 mb-3">
+                <h6 class="fw-bold">📖 Покупателям</h6>
+                <a href="/rights" class="btn btn-sm btn-outline-dark rounded-pill">Права покупателя</a>
+            </div>
+        </div>
+        <hr class="my-2" style="border-color: #cbb99d;">
+        <p class="mb-0 small">© 2026 Книжный магазин «Мир Книжек»</p>
+    </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

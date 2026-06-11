@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2 class="mb-4">📋 Управление бронями</h2>
+<a href="/admin" class="btn btn-sm btn-secondary mb-3">← Назад в админку</a>
+
+<div class="table-responsive">
+    <table class="table table-bordered bg-white">
+        <thead class="table-dark">
+            <tr><th>ID</th><th>Пользователь</th><th>Книга</th><th>Автор</th><th>Цена</th><th>Код выдачи</th><th>Статус</th><th>Дата</th><th>Действие</th></tr>
+        </thead>
+        <tbody>
+            {% for r in reservations %}
+            <tr>
+                <td>{{ r.id }}</td>
+                <td>{{ r.username }}</td>
+                <td>{{ r.book_title }}</td>
+                <td>{{ r.book_author }}</td>
+                <td>{{ r.book_price }} ₽</td>
+                <td><code class="bg-light p-1">{{ r.pickup_code }}</code></td>
+                <td>
+                    {% if r.status == 'active' %}
+                        <span class="badge bg-success">Активна</span>
+                    {% elif r.status == 'completed' %}
+                        <span class="badge bg-info">Выдана</span>
+                    {% else %}
+                        <span class="badge bg-secondary">{{ r.status }}</span>
+                    {% endif %}
+                </td>
+                <td>{{ r.created_at }}</td>
+                <td>
+                    <a href="/admin/reservations/delete/{{ r.id }}" class="btn btn-sm btn-danger" onclick="return confirm('Удалить бронь?')">Удалить</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

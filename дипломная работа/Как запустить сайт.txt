@@ -1,0 +1,18 @@
+Чтобы запустить сайт, нужно прописать python app.py 
+там будет порт и ты должен быть ссылка .
+если что то случится с базой данных, удали файл database и в cmd терминале пропиши python -m venv venv
+пароль от админки 
+логин: admin
+пароль: admin123
+
+//Также нельзя меня название папки основной, она должна быть написанна : Дипломная работа
+
+
+также нужно использовать библиотеку pip install flask authlib requests python-dotenv
+pip install flask authlib requests python-dotenv
+так же установить pip install Flask-Limiter
+и pip install Flask-WTF
+
+и pip install Flask-WTF Flask-Limiter authlib requests python-dotenv
+
+И самое главное pip install waitress

@@ -1,0 +1,9 @@
+Flask
+gunicorn
+authlib
+requests
+python-dotenv
+Flask-Limiter
+Flask-WTF
+Werkzeug
+waitress

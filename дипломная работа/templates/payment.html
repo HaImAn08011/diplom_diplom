@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h3 class="mb-0">Оформление заказа</h3>
+            </div>
+            <div class="card-body">
+                <h5 class="mb-3">Ваши книги:</h5>
+                <ul class="list-group mb-3">
+                    {% for item in items %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ item.title }} ({{ item.author }})
+                        <span class="badge bg-primary rounded-pill">{{ item.price }} ₽</span>
+                    </li>
+                    {% endfor %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center fw-bold">
+                        Итого
+                        <span>{{ total }} ₽</span>
+                    </li>
+                </ul>
+
+                <h5 class="mb-3">Способ оплаты (демо-режим)</h5>
+                <form method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    <div class="mb-3">
+                        <select name="payment_method" class="form-select">
+                            <option value="card">Банковская карта (тестовая)</option>
+                            <option value="cash">Наличные при получении</option>
+                            <option value="online">Электронный кошелёк</option>
+                        </select>
+                    </div>
+                    <div class="alert alert-info">
+                        <small>Это тестовый режим. Никакие деньги не списываются. После нажатия "Оплатить" заказ будет сохранён.</small>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100 py-2">Оплатить (демо)</button>
+                    <a href="/cart" class="btn btn-outline-secondary w-100 mt-2">Вернуться в корзину</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

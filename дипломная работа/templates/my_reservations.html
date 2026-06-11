@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2 class="mb-4">📖 Мои бронирования</h2>
+{% if reservations %}
+    <div class="row">
+        {% for res in reservations %}
+        <div class="col-md-6 mb-3">
+            <div class="card border-warning h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ res.book_title }}</h5>
+                    <p class="card-text text-muted">{{ res.book_author }}</p>
+                    <p class="fw-bold">{{ res.book_price }} ₽</p>
+                    <div class="alert alert-info p-2 text-center">
+                        <strong>🎫 Код для получения:</strong> 
+                        <span class="fs-4 fw-monospace">{{ res.pickup_code }}</span>
+                    </div>
+                    <small class="text-secondary">Забронировано: {{ res.created_at }}</small>
+                    <div class="mt-3">
+                        <a href="/cancel_reservation/{{ res.id }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Отменить бронь?')">❌ Отменить бронь</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <p class="mt-3 text-muted small">* Книга откладывается на кассе. Назовите код продавцу.</p>
+{% else %}
+    <div class="alert alert-light text-center">
+        <p>У вас пока нет активных броней.</p>
+        <a href="/" class="btn btn-primary">Перейти в каталог</a>
+    </div>
+{% endif %}
+{% endblock %}

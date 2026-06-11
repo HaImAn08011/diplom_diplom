@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2 class="mb-4">Личный кабинет: {{ session.username }}</h2>
+        <h4 class="mb-3">История ваших заказов</h4>
+        
+        {% if history %}
+            {% for order in history %}
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <span class="fw-bold">Заказ №{{ order.info.id }}</span>
+                    <span class="text-muted">{{ order.info.date }}</span>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-2">
+                        {% for item in order['items'] %}
+                        <li class="d-flex justify-content-between">
+                            <span>{{ item.book_title }}</span>
+                            <span>{{ item.price }} ₽</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <hr>
+                    <div class="text-end">
+                        <h5 class="fw-bold text-primary">Итого: {{ order.info.total }} ₽</h5>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="card p-5 text-center">
+                <p class="text-muted">Вы еще не совершали покупок.</p>
+                <a href="/" class="btn btn-primary w-50 mx-auto">Перейти к покупкам</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
